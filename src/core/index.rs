@@ -173,11 +173,11 @@ impl Index {
     }
 
     /// Helper to access the tokenizer associated to a specific field.
-    pub fn tokenizer_for_field(&self, field: Field) -> Result<Box<dyn BoxedTokenizer>> {
+    pub fn tokenizer_for_field(&self, field: Field) -> Result<BoxedTokenizer> {
         let field_entry = self.schema.get_field_entry(field);
         let field_type = field_entry.field_type();
         let tokenizer_manager: &TokenizerManager = self.tokenizers();
-        let tokenizer_name_opt: Option<Box<dyn BoxedTokenizer>> = match field_type {
+        let tokenizer_name_opt: Option<BoxedTokenizer> = match field_type {
             FieldType::Str(text_options) => text_options
                 .get_indexing_options()
                 .map(|text_indexing_options| text_indexing_options.tokenizer().to_string())
@@ -459,13 +459,13 @@ mod tests {
 
         use super::*;
         use std::path::PathBuf;
-        use tempdir::TempDir;
+        use tempfile::TempDir;
 
         #[test]
         fn test_index_on_commit_reload_policy_mmap() {
             let schema = throw_away_schema();
             let field = schema.get_field("num_likes").unwrap();
-            let tempdir = TempDir::new("index").unwrap();
+            let tempdir = TempDir::new().unwrap();
             let tempdir_path = PathBuf::from(tempdir.path());
             let index = Index::create_in_dir(&tempdir_path, schema).unwrap();
             let mut writer = index.writer_with_num_threads(1, 3_000_000).unwrap();
@@ -504,7 +504,7 @@ mod tests {
         fn test_index_on_commit_reload_policy_different_directories() {
             let schema = throw_away_schema();
             let field = schema.get_field("num_likes").unwrap();
-            let tempdir = TempDir::new("index").unwrap();
+            let tempdir = TempDir::new().unwrap();
             let tempdir_path = PathBuf::from(tempdir.path());
             let write_index = Index::create_in_dir(&tempdir_path, schema).unwrap();
             let read_index = Index::open_in_dir(&tempdir_path).unwrap();

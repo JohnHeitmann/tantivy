@@ -1,9 +1,9 @@
 #![doc(html_logo_url = "http://fulmicoton.com/tantivy-logo/tantivy-logo.png")]
+#![recursion_limit = "100"]
 #![cfg_attr(all(feature = "unstable", test), feature(test))]
 #![cfg_attr(feature = "cargo-clippy", allow(clippy::module_inception))]
 #![doc(test(attr(allow(unused_variables), deny(warnings))))]
 #![warn(missing_docs)]
-#![recursion_limit = "80"]
 
 //! # `tantivy`
 //!
@@ -12,7 +12,7 @@
 //!
 //! ```rust
 
-//! # extern crate tempdir;
+//! # extern crate tempfile;
 //! #
 //! #[macro_use]
 //! extern crate tantivy;
@@ -20,7 +20,7 @@
 //! // ...
 //!
 //! # use std::path::Path;
-//! # use tempdir::TempDir;
+//! # use tempfile::TempDir;
 //! # use tantivy::Index;
 //! # use tantivy::schema::*;
 //! # use tantivy::{Score, DocAddress};
@@ -30,7 +30,7 @@
 //! # fn main() {
 //! #     // Let's create a temporary directory for the
 //! #     // sake of this example
-//! #     if let Ok(dir) = TempDir::new("tantivy_example_dir") {
+//! #     if let Ok(dir) = TempDir::new() {
 //! #         run_example(dir.path()).unwrap();
 //! #         dir.close().unwrap();
 //! #     }
